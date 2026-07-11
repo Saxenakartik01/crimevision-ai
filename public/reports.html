@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrimeVision AI — Reports</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/static.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#05070a] text-slate-100">
+  <canvas id="particles-canvas"></canvas>
+  <div class="animated-grid fixed inset-0 z-0 opacity-30"></div>
+
+  <aside class="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col justify-between border-r border-[rgba(99,102,241,0.22)] bg-[#080c18]/95 backdrop-blur-xl md:flex">
+    <div>
+      <div class="flex h-20 items-center gap-3 border-b border-[rgba(99,102,241,0.22)] px-6">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 shadow-lg shadow-blue-500/30">
+          <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white">Crime<span class="text-blue-400">Vision</span></h1>
+          <p class="text-[10px] uppercase tracking-widest text-slate-400">AI Intelligence</p>
+        </div>
+      </div>
+      <nav class="space-y-1 p-4">
+        <a href="/dashboard.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+        <a href="/analytics.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Analytics</a>
+        <a href="/heatmap.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Crime Map</a>
+        <a href="/criminals.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Criminals</a>
+        <a href="/reports.html" class="sidebar-link active flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition"><svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Reports</a>
+      </nav>
+    </div>
+  </aside>
+
+  <header class="fixed left-0 right-0 top-0 z-30 border-b border-[rgba(99,102,241,0.22)] bg-[#080c18]/80 backdrop-blur-xl md:left-64">
+    <div class="flex h-20 items-center justify-between px-6">
+      <div class="hidden md:block flex-1">
+        <div class="relative max-w-md">
+          <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search FIR, criminal, area..." class="w-full rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] py-2.5 pl-10 pr-4 text-sm text-slate-200 outline-none focus:border-blue-500/60" />
+        </div>
+      </div>
+      <div class="flex items-center gap-4 ml-auto">
+        <button class="relative rounded-xl p-2.5 text-slate-400 transition hover:bg-white/5 hover:text-slate-200">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]"></span>
+        </button>
+        <div class="flex items-center gap-3 rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] px-3 py-2">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600">
+            <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="hidden md:block">
+            <p class="text-xs font-semibold text-slate-200">DCP A. Rao</p>
+            <p class="text-[10px] text-slate-500">Delhi HQ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 min-h-screen pt-24 pb-10 md:pl-64 md:pt-24">
+    <div class="page-transition px-4 md:px-8">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white">Intelligence <span class="text-gradient">Reports</span></h1>
+        <p class="text-sm text-slate-400">Generate and export police intelligence documents</p>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-3">
+        <div class="space-y-3 lg:col-span-1" id="report-list">
+          <button data-id="crime" class="report-btn flex w-full items-start gap-4 rounded-2xl border border-blue-500/50 bg-blue-500/10 p-4 text-left shadow-[0_0_20px_rgba(59,130,246,0.2)] transition">
+            <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-blue-400"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
+            <div><h3 class="font-semibold text-slate-200">Crime Report</h3><p class="mt-1 text-xs text-slate-500">Comprehensive crime incident report across all districts.</p></div>
+          </button>
+          <button data-id="district" class="report-btn flex w-full items-start gap-4 rounded-2xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-4 text-left transition hover:bg-white/5">
+            <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-blue-400"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l8-4 8 4v14"/><path d="M13 11h4"/><path d="M13 15h4"/><path d="M13 7h4"/></svg></div>
+            <div><h3 class="font-semibold text-slate-200">District Report</h3><p class="mt-1 text-xs text-slate-500">District-wise crime statistics and trend analysis.</p></div>
+          </button>
+          <button data-id="monthly" class="report-btn flex w-full items-start gap-4 rounded-2xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-4 text-left transition hover:bg-white/5">
+            <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-blue-400"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div><h3 class="font-semibold text-slate-200">Monthly Report</h3><p class="mt-1 text-xs text-slate-500">Month-over-month crime comparison and KPI summary.</p></div>
+          </button>
+          <button data-id="yearly" class="report-btn flex w-full items-start gap-4 rounded-2xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-4 text-left transition hover:bg-white/5">
+            <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-blue-400"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg></div>
+            <div><h3 class="font-semibold text-slate-200">Yearly Report</h3><p class="mt-1 text-xs text-slate-500">Annual crime review and predictive forecasting.</p></div>
+          </button>
+          <button data-id="officer" class="report-btn flex w-full items-start gap-4 rounded-2xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-4 text-left transition hover:bg-white/5">
+            <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-white/5 text-blue-400"><svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div><h3 class="font-semibold text-slate-200">Officer Report</h3><p class="mt-1 text-xs text-slate-500">Case-load and performance summary by officer.</p></div>
+          </button>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 lg:col-span-2">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold text-white" id="report-title">Crime Report</h2>
+              <p class="text-xs text-slate-500">Generated on <span id="report-date"></span> • Demo Only</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex items-center gap-2 rounded-xl bg-red-500/15 px-4 py-2 text-sm font-semibold text-red-400 transition hover:bg-red-500/25"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>PDF</button>
+              <button class="flex items-center gap-2 rounded-xl bg-emerald-500/15 px-4 py-2 text-sm font-semibold text-emerald-400 transition hover:bg-emerald-500/25"><svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>CSV</button>
+            </div>
+          </div>
+
+          <div class="space-y-4 rounded-xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-5">
+            <div class="flex items-center gap-3 border-b border-[rgba(99,102,241,0.22)] pb-4">
+              <svg class="h-8 w-8 text-blue-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+              <div><p class="font-bold text-white">CrimeVision AI — <span id="report-title2">Crime Report</span></p><p class="text-xs text-slate-500">National Police Intelligence Platform • Classification: Internal Use</p></div>
+            </div>
+            <div class="grid gap-4 md:grid-cols-3">
+              <div class="rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3"><p class="text-xs text-slate-500">Total Cases</p><p class="text-xl font-bold text-white">12,483</p></div>
+              <div class="rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3"><p class="text-xs text-slate-500">Solved Cases</p><p class="text-xl font-bold text-emerald-400">7,842</p></div>
+              <div class="rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3"><p class="text-xs text-slate-500">Pending Cases</p><p class="text-xl font-bold text-amber-400">4,641</p></div>
+            </div>
+            <div>
+              <h4 class="mb-2 text-sm font-bold text-slate-200">Key Findings</h4>
+              <ul class="list-disc space-y-2 pl-5 text-sm text-slate-400">
+                <li>Cyber crime reports increased by 28.6% month-over-month, primarily UPI and OTP fraud.</li>
+                <li>Delhi remains the highest-risk district with a risk score of 86/100.</li>
+                <li>Vehicle theft cases show 14.2% upward trend in NCR industrial belt.</li>
+                <li>Repeat offender flagged in 14 active robbery cases across Agra.</li>
+                <li>AI recommends 18% additional weekend patrol staffing in hotspot zones.</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="mb-2 text-sm font-bold text-slate-200">Officer Summary</h4>
+              <div class="space-y-2">
+                <div class="flex items-center justify-between rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3 text-sm"><div class="flex items-center gap-3"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-violet-600 text-xs font-bold text-white">AR</div><div><p class="text-slate-200">DCP Ananya Rao</p><p class="text-xs text-slate-500">District Commissioner • Delhi HQ</p></div></div><span class="font-semibold text-blue-300">1240 cases</span></div>
+                <div class="flex items-center justify-between rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3 text-sm"><div class="flex items-center gap-3"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-violet-600 text-xs font-bold text-white">RM</div><div><p class="text-slate-200">Inspector Rohit Mehra</p><p class="text-xs text-slate-500">Cyber Crime Unit • Lucknow</p></div></div><span class="font-semibold text-blue-300">856 cases</span></div>
+                <div class="flex items-center justify-between rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3 text-sm"><div class="flex items-center gap-3"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-violet-600 text-xs font-bold text-white">PN</div><div><p class="text-slate-200">SI Priya Nair</p><p class="text-xs text-slate-500">Investigation Officer • Noida</p></div></div><span class="font-semibold text-blue-300">642 cases</span></div>
+              </div>
+            </div>
+            <div class="rounded-lg border border-dashed border-[rgba(99,102,241,0.4)] bg-black/10 p-4 text-center text-xs text-slate-500">
+              This is a demo export. In production, CrimeVision AI generates authenticated PDF/CSV documents with digital signatures and audit trails.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/assets/js/static.js"></script>
+  <script>
+    const titles = { crime: 'Crime Report', district: 'District Report', monthly: 'Monthly Report', yearly: 'Yearly Report', officer: 'Officer Report' };
+    document.getElementById('report-date').textContent = new Date().toLocaleDateString();
+    document.querySelectorAll('.report-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.report-btn').forEach(b => {
+          b.className = 'report-btn flex w-full items-start gap-4 rounded-2xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-4 text-left transition hover:bg-white/5';
+        });
+        btn.className = 'report-btn flex w-full items-start gap-4 rounded-2xl border border-blue-500/50 bg-blue-500/10 p-4 text-left shadow-[0_0_20px_rgba(59,130,246,0.2)] transition';
+        const id = btn.dataset.id;
+        document.getElementById('report-title').textContent = titles[id];
+        document.getElementById('report-title2').textContent = titles[id];
+      });
+    });
+  </script>
+</body>
+</html>

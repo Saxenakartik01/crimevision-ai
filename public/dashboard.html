@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrimeVision AI — Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/assets/css/static.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#05070a] text-slate-100">
+  <canvas id="particles-canvas"></canvas>
+  <div class="animated-grid fixed inset-0 z-0 opacity-30"></div>
+
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col justify-between border-r border-[rgba(99,102,241,0.22)] bg-[#080c18]/95 backdrop-blur-xl md:flex">
+    <div>
+      <div class="flex h-20 items-center gap-3 border-b border-[rgba(99,102,241,0.22)] px-6">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 shadow-lg shadow-blue-500/30">
+          <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white">Crime<span class="text-blue-400">Vision</span></h1>
+          <p class="text-[10px] uppercase tracking-widest text-slate-400">AI Intelligence</p>
+        </div>
+      </div>
+      <nav class="space-y-1 p-4">
+        <a href="/dashboard.html" class="sidebar-link active flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition"><svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+        <a href="/analytics.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Analytics</a>
+        <a href="/heatmap.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Crime Map</a>
+        <a href="/criminals.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Criminals</a>
+        <a href="/reports.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Reports</a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Navbar -->
+  <header class="fixed left-0 right-0 top-0 z-30 border-b border-[rgba(99,102,241,0.22)] bg-[#080c18]/80 backdrop-blur-xl md:left-64">
+    <div class="flex h-20 items-center justify-between px-6">
+      <div class="hidden md:block flex-1">
+        <div class="relative max-w-md">
+          <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search FIR, criminal, area..." class="w-full rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] py-2.5 pl-10 pr-4 text-sm text-slate-200 outline-none focus:border-blue-500/60" />
+        </div>
+      </div>
+      <div class="flex items-center gap-4 ml-auto">
+        <button class="relative rounded-xl p-2.5 text-slate-400 transition hover:bg-white/5 hover:text-slate-200">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]"></span>
+        </button>
+        <div class="flex items-center gap-3 rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] px-3 py-2">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600">
+            <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="hidden md:block">
+            <p class="text-xs font-semibold text-slate-200">DCP A. Rao</p>
+            <p class="text-[10px] text-slate-500">Delhi HQ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 min-h-screen pt-24 pb-10 md:pl-64 md:pt-24">
+    <div class="page-transition px-4 md:px-8">
+      <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-white">Command <span class="text-gradient">Dashboard</span></h1>
+          <p class="text-sm text-slate-400">Real-time intelligence overview • Last updated 2 minutes ago</p>
+        </div>
+        <div class="flex gap-3">
+          <button class="rounded-xl border border-[rgba(99,102,241,0.22)] bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/10">Export PDF</button>
+          <button class="btn-primary rounded-xl px-4 py-2 text-sm font-semibold text-white">Refresh Data</button>
+        </div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5" id="kpi-grid"></div>
+
+      <div class="mt-6 grid gap-6 lg:grid-cols-3">
+        <div class="lg:col-span-2 glass-card rounded-2xl p-5">
+          <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-white">Monthly Crime Trends</h3>
+            <span class="rounded-full bg-blue-500/15 px-2.5 py-1 text-xs font-semibold text-blue-400">2024 YTD</span>
+          </div>
+          <div class="chart-box"><canvas id="lineChart"></canvas></div>
+        </div>
+        <div class="glass-card rounded-2xl p-5">
+          <h3 class="mb-4 text-lg font-bold text-white">Crime Distribution</h3>
+          <div class="chart-box"><canvas id="pieChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="mt-6 grid gap-6 lg:grid-cols-3">
+        <div class="glass-card rounded-2xl p-5 lg:col-span-2">
+          <div class="mb-4 flex items-center gap-2">
+            <svg class="h-5 w-5 text-violet-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V3"/><path d="M17 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/><path d="M17 17h.01"/><path d="M21 11v3a2 2 0 0 1-2 2h-3"/><path d="m19 19-1.5-1.5"/><path d="M13 21H8a2 2 0 0 1-2-2v-3"/><path d="m5 19 1.5-1.5"/><path d="M11 3H8a2 2 0 0 0-2 2v3"/><path d="m5 5 1.5 1.5"/><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/></svg>
+            <h3 class="text-lg font-bold text-white">AI Insights Engine</h3>
+          </div>
+          <div class="relative min-h-[180px] overflow-hidden rounded-xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-5">
+            <p id="insight-text" class="text-xl font-medium leading-relaxed text-slate-200">“Vehicle theft increased by 28%.”</p>
+            <p class="mt-4 text-xs uppercase tracking-wider text-slate-500">Insight <span id="insight-index">1</span> of 7</p>
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-slate-800"><div id="insight-bar" class="h-full bg-gradient-to-r from-blue-500 to-violet-500 transition-all duration-300" style="width:14%"></div></div>
+          </div>
+        </div>
+        <div class="glass-card rounded-2xl p-5">
+          <div class="mb-4 flex items-center gap-2">
+            <svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <h3 class="text-lg font-bold text-white">Live Alerts</h3>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-start gap-3 rounded-xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-3">
+              <span class="mt-0.5 h-2 w-2 flex-shrink-0 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]"></span>
+              <div><p class="text-sm font-medium text-slate-200">High-risk suspect spotted near Sector 18 Noida</p><p class="text-xs text-slate-500">Noida • 2 min ago</p></div>
+            </div>
+            <div class="flex items-start gap-3 rounded-xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-3">
+              <span class="mt-0.5 h-2 w-2 flex-shrink-0 rounded-full bg-amber-500"></span>
+              <div><p class="text-sm font-medium text-slate-200">Cyber fraud cluster detected in Gomti Nagar</p><p class="text-xs text-slate-500">Lucknow • 14 min ago</p></div>
+            </div>
+            <div class="flex items-start gap-3 rounded-xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-3">
+              <span class="mt-0.5 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500"></span>
+              <div><p class="text-sm font-medium text-slate-200">Stolen vehicle recovered in Kanpur industrial belt</p><p class="text-xs text-slate-500">Kanpur • 32 min ago</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/assets/js/static.js"></script>
+  <script>
+    const kpis = [
+      { label: 'Total Crimes', value: 12483, change: '+12.4%', trend: 'up' },
+      { label: 'Bike Theft', value: 3421, change: '+8.2%', trend: 'up' },
+      { label: 'Phone Snatching', value: 2156, change: '-4.1%', trend: 'down' },
+      { label: 'Robbery', value: 982, change: '+2.3%', trend: 'up' },
+      { label: 'Cyber Crime', value: 1874, change: '+28.6%', trend: 'up' },
+      { label: 'Fraud', value: 1432, change: '+15.2%', trend: 'up' },
+      { label: 'Vehicle Theft', value: 1654, change: '+6.7%', trend: 'up' },
+      { label: "Women's Safety", value: 876, change: '-7.9%', trend: 'down' },
+      { label: 'Solved Cases', value: 7842, change: '+9.5%', trend: 'up' },
+      { label: 'Pending Cases', value: 4641, change: '-3.2%', trend: 'down' },
+      { label: 'Risk Score', value: 72, change: '+5', trend: 'up' },
+      { label: 'Weekly Growth', value: 11, suffix: '%', change: '+1.8%', trend: 'up' },
+      { label: 'Monthly Growth', value: 15, suffix: '%', change: '+3.4%', trend: 'up' },
+    ];
+
+    const kpiGrid = document.getElementById('kpi-grid');
+    kpis.forEach((k, i) => {
+      const div = document.createElement('div');
+      div.className = 'glass-card rounded-2xl p-5';
+      div.innerHTML = `
+        <p class="text-xs font-medium uppercase tracking-wider text-slate-500">${k.label}</p>
+        <p class="mt-2 text-3xl font-bold text-white" data-counter="${k.value}">${k.value}</p>
+        <div class="mt-2 flex items-center gap-1 text-xs font-medium">
+          <span class="${k.trend === 'up' ? 'text-emerald-400' : 'text-rose-400'}">${k.change}</span>
+          <span class="text-slate-500">vs last month</span>
+        </div>`;
+      kpiGrid.appendChild(div);
+    });
+
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.borderColor = 'rgba(99,102,241,0.08)';
+    new Chart(document.getElementById('lineChart'), {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [
+          { label: 'Total Crimes', data: [980,1040,1120,1080,1150,1220,1300,1280,1350,1420,1380,1463], borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.15)', borderWidth: 2, tension: 0.4, fill: true, pointBackgroundColor: '#0b1020' },
+          { label: 'Solved Cases', data: [620,680,720,710,760,800,850,830,890,940,910,982], borderColor: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.12)', borderWidth: 2, tension: 0.4, fill: true, pointBackgroundColor: '#0b1020' }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
+    });
+
+    new Chart(document.getElementById('pieChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Bike Theft','Phone Snatching','Robbery','Cyber Crime','Fraud','Vehicle Theft','Kidnapping',"Women's Safety"],
+        datasets: [{ data: [3421,2156,982,1874,1432,1654,124,876], backgroundColor: ['#3b82f6','#8b5cf6','#06b6d4','#f472b6','#fbbf24','#34d399','#f87171','#a78bfa'], borderColor: '#0b1020', borderWidth: 2 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } } } }
+    });
+
+    const insights = [
+      'Vehicle theft increased by 28%.',
+      'Delhi is now a high-risk district.',
+      'Repeat offender detected.',
+      'Additional patrol recommended.',
+      'Cyber crime reports surged 28.6% this month.',
+      'Weekend crime prediction indicates 18% higher probability.',
+      'Pattern detected near metro stations.'
+    ];
+    let idx = 0;
+    setInterval(() => {
+      idx = (idx + 1) % insights.length;
+      document.getElementById('insight-text').textContent = '“' + insights[idx] + '”';
+      document.getElementById('insight-index').textContent = idx + 1;
+      document.getElementById('insight-bar').style.width = ((idx + 1) / insights.length * 100) + '%';
+    }, 4500);
+  </script>
+</body>
+</html>

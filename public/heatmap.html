@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrimeVision AI — Crime Map</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="/assets/css/static.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#05070a] text-slate-100">
+  <canvas id="particles-canvas"></canvas>
+  <div class="animated-grid fixed inset-0 z-0 opacity-30"></div>
+
+  <aside class="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col justify-between border-r border-[rgba(99,102,241,0.22)] bg-[#080c18]/95 backdrop-blur-xl md:flex">
+    <div>
+      <div class="flex h-20 items-center gap-3 border-b border-[rgba(99,102,241,0.22)] px-6">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 shadow-lg shadow-blue-500/30">
+          <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white">Crime<span class="text-blue-400">Vision</span></h1>
+          <p class="text-[10px] uppercase tracking-widest text-slate-400">AI Intelligence</p>
+        </div>
+      </div>
+      <nav class="space-y-1 p-4">
+        <a href="/dashboard.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+        <a href="/analytics.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Analytics</a>
+        <a href="/heatmap.html" class="sidebar-link active flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition"><svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Crime Map</a>
+        <a href="/criminals.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Criminals</a>
+        <a href="/reports.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Reports</a>
+      </nav>
+    </div>
+  </aside>
+
+  <header class="fixed left-0 right-0 top-0 z-30 border-b border-[rgba(99,102,241,0.22)] bg-[#080c18]/80 backdrop-blur-xl md:left-64">
+    <div class="flex h-20 items-center justify-between px-6">
+      <div class="hidden md:block flex-1">
+        <div class="relative max-w-md">
+          <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search FIR, criminal, area..." class="w-full rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] py-2.5 pl-10 pr-4 text-sm text-slate-200 outline-none focus:border-blue-500/60" />
+        </div>
+      </div>
+      <div class="flex items-center gap-4 ml-auto">
+        <button class="relative rounded-xl p-2.5 text-slate-400 transition hover:bg-white/5 hover:text-slate-200">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]"></span>
+        </button>
+        <div class="flex items-center gap-3 rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] px-3 py-2">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600">
+            <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="hidden md:block">
+            <p class="text-xs font-semibold text-slate-200">DCP A. Rao</p>
+            <p class="text-[10px] text-slate-500">Delhi HQ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 min-h-screen pt-24 pb-10 md:pl-64 md:pt-24">
+    <div class="page-transition px-4 md:px-8">
+      <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white">Crime <span class="text-gradient">Heatmap</span></h1>
+        <p class="text-sm text-slate-400">Interactive intelligence map with AI hotspot detection</p>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-3">
+        <div class="glass-card rounded-2xl p-1 lg:col-span-2">
+          <div id="map" class="h-[520px] w-full rounded-xl"></div>
+        </div>
+        <div class="space-y-4">
+          <div class="glass-card rounded-2xl p-5">
+            <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-white"><svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>City Intelligence</h3>
+            <div class="space-y-2" id="city-list"></div>
+          </div>
+          <div class="glass-card rounded-2xl p-5" id="city-detail">
+            <h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-white"><svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Delhi Details</h3>
+            <div class="grid grid-cols-2 gap-3 text-sm" id="detail-grid"></div>
+            <div class="mt-4 space-y-2 text-sm" id="detail-breakdown"></div>
+            <div class="mt-4 rounded-xl border border-[rgba(99,102,241,0.22)] bg-violet-500/10 p-3">
+              <div class="mb-1 flex items-center gap-2"><svg class="h-4 w-4 text-violet-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5V3"/><path d="M17 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/><path d="M17 17h.01"/></svg><span class="text-xs font-semibold text-violet-300">AI Recommendation</span></div>
+              <p class="text-xs leading-relaxed text-slate-300" id="detail-rec"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/assets/js/static.js"></script>
+  <script>
+    const cityData = [
+      { name: 'Delhi', lat: 28.6139, lng: 77.209, crimes: 4521, solved: 2890, pending: 1631, risk: 86, trend: '+14%', recommendation: 'Deploy additional patrol units in North-West district. Cybercrime cell requires reinforcement.', breakdown: { bikeTheft: 1120, phoneSnatching: 980, robbery: 320, cyberCrime: 980, fraud: 420, vehicleTheft: 560, kidnapping: 41, womenSafety: 100 } },
+      { name: 'Agra', lat: 27.1767, lng: 78.0081, crimes: 1843, solved: 1240, pending: 603, risk: 64, trend: '+5%', recommendation: 'Tourist zones need enhanced CCTV coverage. Increase foot patrols near Taj Ganj area.', breakdown: { bikeTheft: 520, phoneSnatching: 310, robbery: 110, cyberCrime: 180, fraud: 210, vehicleTheft: 190, kidnapping: 12, womenSafety: 301 } },
+      { name: 'Lucknow', lat: 26.8467, lng: 80.9462, crimes: 2456, solved: 1620, pending: 836, risk: 71, trend: '+9%', recommendation: 'Gomti Nagar cyber hub shows fraud spike. Recommend dedicated white-collar crime task force.', breakdown: { bikeTheft: 610, phoneSnatching: 420, robbery: 170, cyberCrime: 390, fraud: 280, vehicleTheft: 260, kidnapping: 18, womenSafety: 308 } },
+      { name: 'Kanpur', lat: 26.4499, lng: 80.3319, crimes: 1987, solved: 1280, pending: 707, risk: 67, trend: '+6%', recommendation: 'Industrial belt vehicle thefts rising. Coordinate with RTO for stolen vehicle database sync.', breakdown: { bikeTheft: 480, phoneSnatching: 350, robbery: 140, cyberCrime: 210, fraud: 190, vehicleTheft: 320, kidnapping: 15, womenSafety: 282 } },
+      { name: 'Varanasi', lat: 25.3176, lng: 82.9739, crimes: 1320, solved: 910, pending: 410, risk: 58, trend: '-2%', recommendation: 'Pilgrimage season crowd control and pickpocketing prevention recommended.', breakdown: { bikeTheft: 310, phoneSnatching: 280, robbery: 80, cyberCrime: 120, fraud: 110, vehicleTheft: 150, kidnapping: 8, womenSafety: 261 } },
+      { name: 'Noida', lat: 28.5355, lng: 77.391, crimes: 2356, solved: 1580, pending: 776, risk: 74, trend: '+11%', recommendation: 'Metro corridor phone snatching cluster detected. Increase plainclothes deployment.', breakdown: { bikeTheft: 430, phoneSnatching: 610, robbery: 150, cyberCrime: 420, fraud: 260, vehicleTheft: 240, kidnapping: 11, womenSafety: 235 } },
+    ];
+
+    function markerIcon(risk) {
+      const color = risk >= 80 ? '#ef4444' : risk >= 65 ? '#f59e0b' : '#3b82f6';
+      return L.divIcon({
+        className: 'custom-marker',
+        html: `<div style="position:relative;width:28px;height:28px;"><span style="position:absolute;inset:0;border-radius:50%;background:${color};opacity:0.35;animation:pulseGlow 1.8s ease-out infinite;"></span><span style="position:absolute;inset:4px;border-radius:50%;background:${color};box-shadow:0 0 12px ${color};border:2px solid white;"></span></div>`,
+        iconSize: [28, 28], iconAnchor: [14, 14]
+      });
+    }
+
+    const map = L.map('map').setView([26.8467, 80.9462], 6);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; CARTO' }).addTo(map);
+
+    let selected = cityData[0];
+    cityData.forEach(city => {
+      const m = L.marker([city.lat, city.lng], { icon: markerIcon(city.risk) }).addTo(map);
+      m.bindPopup(`<b>${city.name}</b><br>Risk: ${city.risk}/100<br>FIRs: ${city.crimes}`);
+      m.on('click', () => renderCity(city));
+    });
+
+    function renderCity(city) {
+      selected = city;
+      map.flyTo([city.lat, city.lng], 10, { duration: 1.2 });
+      document.querySelector('#city-detail h3').innerHTML = `<svg class="h-5 w-5 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>${city.name} Details`;
+      document.getElementById('detail-grid').innerHTML = `
+        <div class="rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3"><p class="text-xs text-slate-500">Total FIR</p><p class="font-bold text-white">${city.crimes.toLocaleString()}</p></div>
+        <div class="rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3"><p class="text-xs text-slate-500">Solved</p><p class="font-bold text-emerald-400">${city.solved.toLocaleString()}</p></div>
+        <div class="rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3"><p class="text-xs text-slate-500">Pending</p><p class="font-bold text-amber-400">${city.pending.toLocaleString()}</p></div>
+        <div class="rounded-lg border border-[rgba(99,102,241,0.22)] bg-black/20 p-3"><p class="text-xs text-slate-500">Risk Score</p><p class="font-bold ${city.risk >= 80 ? 'text-red-400' : city.risk >= 65 ? 'text-amber-400' : 'text-blue-400'}">${city.risk}/100</p></div>`;
+      document.getElementById('detail-breakdown').innerHTML = Object.entries(city.breakdown).map(([k, v]) => `<p class="flex justify-between text-slate-300"><span>${k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}</span><span class="text-white">${v}</span></p>`).join('');
+      document.getElementById('detail-rec').textContent = city.recommendation;
+    }
+
+    const cityList = document.getElementById('city-list');
+    cityData.forEach(city => {
+      const btn = document.createElement('button');
+      btn.className = 'flex w-full items-center justify-between rounded-xl border border-[rgba(99,102,241,0.22)] bg-black/20 p-3 text-left transition hover:bg-white/5';
+      btn.innerHTML = `<div><p class="text-sm font-semibold text-slate-200">${city.name}</p><p class="text-xs text-slate-500">${city.crimes.toLocaleString()} FIRs</p></div><span class="rounded-full px-2 py-0.5 text-xs font-bold ${city.risk >= 80 ? 'bg-red-500/15 text-red-400' : city.risk >= 65 ? 'bg-amber-500/15 text-amber-400' : 'bg-blue-500/15 text-blue-400'}">${city.risk}</span>`;
+      btn.onclick = () => renderCity(city);
+      cityList.appendChild(btn);
+    });
+
+    renderCity(selected);
+  </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrimeVision AI — Criminal Records</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/static.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body class="bg-[#05070a] text-slate-100">
+  <canvas id="particles-canvas"></canvas>
+  <div class="animated-grid fixed inset-0 z-0 opacity-30"></div>
+
+  <aside class="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col justify-between border-r border-[rgba(99,102,241,0.22)] bg-[#080c18]/95 backdrop-blur-xl md:flex">
+    <div>
+      <div class="flex h-20 items-center gap-3 border-b border-[rgba(99,102,241,0.22)] px-6">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 shadow-lg shadow-blue-500/30">
+          <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight text-white">Crime<span class="text-blue-400">Vision</span></h1>
+          <p class="text-[10px] uppercase tracking-widest text-slate-400">AI Intelligence</p>
+        </div>
+      </div>
+      <nav class="space-y-1 p-4">
+        <a href="/dashboard.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</a>
+        <a href="/analytics.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>Analytics</a>
+        <a href="/heatmap.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Crime Map</a>
+        <a href="/criminals.html" class="sidebar-link active flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition"><svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Criminals</a>
+        <a href="/reports.html" class="sidebar-link flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition hover:bg-white/5 hover:text-slate-100"><svg class="h-5 w-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Reports</a>
+      </nav>
+    </div>
+  </aside>
+
+  <header class="fixed left-0 right-0 top-0 z-30 border-b border-[rgba(99,102,241,0.22)] bg-[#080c18]/80 backdrop-blur-xl md:left-64">
+    <div class="flex h-20 items-center justify-between px-6">
+      <div class="hidden md:block flex-1">
+        <div class="relative max-w-md">
+          <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Search FIR, criminal, area..." class="w-full rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] py-2.5 pl-10 pr-4 text-sm text-slate-200 outline-none focus:border-blue-500/60" />
+        </div>
+      </div>
+      <div class="flex items-center gap-4 ml-auto">
+        <button class="relative rounded-xl p-2.5 text-slate-400 transition hover:bg-white/5 hover:text-slate-200">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]"></span>
+        </button>
+        <div class="flex items-center gap-3 rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] px-3 py-2">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-violet-600">
+            <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="hidden md:block">
+            <p class="text-xs font-semibold text-slate-200">DCP A. Rao</p>
+            <p class="text-[10px] text-slate-500">Delhi HQ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 min-h-screen pt-24 pb-10 md:pl-64 md:pt-24">
+    <div class="page-transition px-4 md:px-8">
+      <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-white">Criminal <span class="text-gradient">Records</span></h1>
+          <p class="text-sm text-slate-400">15 persons of interest in database</p>
+        </div>
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="search" placeholder="Search name, crime, area..." class="w-full rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] py-2.5 pl-10 pr-4 text-sm text-slate-200 outline-none focus:border-blue-500/60" />
+          </div>
+          <div class="relative">
+            <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+            <select id="filter" class="w-full appearance-none rounded-xl border border-[rgba(99,102,241,0.22)] bg-[#0b1020] py-2.5 pl-10 pr-8 text-sm text-slate-200 outline-none focus:border-blue-500/60">
+              <option>All</option><option>Robbery</option><option>Vehicle Theft</option><option>Cyber Fraud</option><option>Phone Snatching</option><option>Bike Theft</option><option>Fraud</option><option>Kidnapping</option><option>Cyber Crime</option><option>High Risk</option><option>Repeat</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-6 flex items-center gap-2 rounded-xl border border-[rgba(99,102,241,0.22)] bg-amber-500/10 p-3 text-sm text-amber-300">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 17h.01"/></svg>
+        <span>AI has flagged 6 high-risk individuals requiring immediate attention.</span>
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="criminal-grid"></div>
+    </div>
+  </main>
+
+  <script src="/assets/js/static.js"></script>
+  <script>
+    const criminals = [
+      { id: 1, name: 'Rahul Verma', age: 32, gender: 'Male', crime: 'Robbery', area: 'Karol Bagh, Delhi', station: 'Karol Bagh PS', risk: 92, repeat: true, lastSeen: '2 hrs ago', fir: 'DEL/2024/08921', status: 'Wanted', image: '/assets/images/criminal-01.jpg' },
+      { id: 2, name: 'Ajay Mishra', age: 45, gender: 'Male', crime: 'Vehicle Theft', area: 'Indirapuram, Ghaziabad', station: 'Indirapuram PS', risk: 88, repeat: true, lastSeen: '5 hrs ago', fir: 'GZB/2024/03214', status: 'Absconding', image: '/assets/images/criminal-02.jpg' },
+      { id: 3, name: 'Pooja Sharma', age: 28, gender: 'Female', crime: 'Cyber Fraud', area: 'Gomti Nagar, Lucknow', station: 'Gomti Nagar PS', risk: 74, repeat: false, lastSeen: '1 day ago', fir: 'LKO/2024/01472', status: 'Under Surveillance', image: '/assets/images/criminal-01.jpg' },
+      { id: 4, name: 'Vikram Singh', age: 36, gender: 'Male', crime: 'Phone Snatching', area: 'Sector 18, Noida', station: 'Sector 18 PS', risk: 81, repeat: true, lastSeen: '8 hrs ago', fir: 'NOI/2024/00563', status: 'Wanted', image: '/assets/images/criminal-02.jpg' },
+      { id: 5, name: 'Suresh Yadav', age: 52, gender: 'Male', crime: 'Kidnapping', area: 'Taj Ganj, Agra', station: 'Taj Ganj PS', risk: 95, repeat: true, lastSeen: '3 days ago', fir: 'AGR/2024/00291', status: 'Absconding', image: '/assets/images/criminal-01.jpg' },
+      { id: 6, name: 'Neha Gupta', age: 24, gender: 'Female', crime: 'Fraud', area: 'Hazratganj, Lucknow', station: 'Hazratganj PS', risk: 62, repeat: false, lastSeen: '12 hrs ago', fir: 'LKO/2024/01934', status: 'Bailed', image: '/assets/images/criminal-01.jpg' },
+      { id: 7, name: 'Mohammad Asif', age: 39, gender: 'Male', crime: 'Bike Theft', area: 'Lajpat Nagar, Delhi', station: 'Lajpat Nagar PS', risk: 78, repeat: true, lastSeen: '4 hrs ago', fir: 'DEL/2024/09112', status: 'Wanted', image: '/assets/images/criminal-02.jpg' },
+      { id: 8, name: 'Kiran Patel', age: 30, gender: 'Female', crime: 'Cyber Crime', area: 'Rajajipuram, Lucknow', station: 'Rajajipuram PS', risk: 70, repeat: false, lastSeen: '2 days ago', fir: 'LKO/2024/01655', status: 'Under Investigation', image: '/assets/images/criminal-01.jpg' },
+      { id: 9, name: 'Deepak Kumar', age: 27, gender: 'Male', crime: 'Robbery', area: 'Kalyanpur, Kanpur', station: 'Kalyanpur PS', risk: 85, repeat: true, lastSeen: '6 hrs ago', fir: 'KNP/2024/00741', status: 'Wanted', image: '/assets/images/criminal-02.jpg' },
+      { id: 10, name: 'Anil Chaudhary', age: 41, gender: 'Male', crime: 'Vehicle Theft', area: 'Sikandra, Agra', station: 'Sikandra PS', risk: 80, repeat: true, lastSeen: '1 day ago', fir: 'AGR/2024/00384', status: 'Absconding', image: '/assets/images/criminal-01.jpg' },
+      { id: 11, name: 'Sunita Devi', age: 34, gender: 'Female', crime: 'Fraud', area: 'Vaishali, Ghaziabad', station: 'Vaishali PS', risk: 66, repeat: false, lastSeen: '9 hrs ago', fir: 'GZB/2024/02876', status: 'Bailed', image: '/assets/images/criminal-01.jpg' },
+      { id: 12, name: 'Ravi Shankar', age: 29, gender: 'Male', crime: 'Phone Snatching', area: 'Rohini, Delhi', station: 'Rohini PS', risk: 84, repeat: true, lastSeen: '3 hrs ago', fir: 'DEL/2024/09233', status: 'Wanted', image: '/assets/images/criminal-02.jpg' },
+      { id: 13, name: 'Faizal Khan', age: 37, gender: 'Male', crime: 'Bike Theft', area: 'Aliganj, Lucknow', station: 'Aliganj PS', risk: 76, repeat: true, lastSeen: '7 hrs ago', fir: 'LKO/2024/02011', status: 'Under Surveillance', image: '/assets/images/criminal-02.jpg' },
+      { id: 14, name: 'Priya Mehta', age: 26, gender: 'Female', crime: 'Cyber Fraud', area: 'Sector 62, Noida', station: 'Sector 62 PS', risk: 72, repeat: false, lastSeen: '15 hrs ago', fir: 'NOI/2024/00612', status: 'Under Investigation', image: '/assets/images/criminal-01.jpg' },
+      { id: 15, name: 'Arjun Thakur', age: 43, gender: 'Male', crime: 'Robbery', area: 'Civil Lines, Agra', station: 'Civil Lines PS', risk: 89, repeat: true, lastSeen: '10 hrs ago', fir: 'AGR/2024/00405', status: 'Absconding', image: '/assets/images/criminal-02.jpg' },
+    ];
+
+    function render(list) {
+      const grid = document.getElementById('criminal-grid');
+      grid.innerHTML = list.map(c => {
+        const riskClass = c.risk >= 80 ? 'text-red-400' : c.risk >= 60 ? 'text-amber-400' : 'text-emerald-400';
+        return `<div class="glass-card rounded-2xl p-4 transition hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(139,92,246,0.25)]">
+          <div class="flex gap-4">
+            <div class="relative h-28 w-24 flex-shrink-0 overflow-hidden rounded-xl border border-[rgba(99,102,241,0.22)]">
+              <img src="${c.image}" alt="${c.name}" class="h-full w-full object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <span class="absolute bottom-1 left-1 text-[10px] font-bold ${riskClass}">${c.risk}%</span>
+            </div>
+            <div class="flex-1">
+              <div class="flex items-start justify-between">
+                <div><h3 class="font-bold text-slate-100">${c.name}</h3><p class="text-xs text-slate-500">${c.age} yrs • ${c.gender}</p></div>
+                ${c.repeat ? '<span class="flex items-center gap-1 rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] font-semibold text-red-400">Repeat</span>' : ''}
+              </div>
+              <p class="mt-1 text-sm font-medium text-blue-300">${c.crime}</p>
+              <div class="mt-2 space-y-1 text-xs text-slate-400">
+                <p>${c.area}</p>
+                <p>${c.lastSeen}</p>
+                <p>${c.fir}</p>
+              </div>
+              <div class="mt-3 flex gap-2">
+                <a href="/criminal-profile.html" class="flex-1 rounded-lg bg-blue-600/20 py-1.5 text-center text-xs font-semibold text-blue-300 transition hover:bg-blue-600/30">View Profile</a>
+                <button class="flex items-center justify-center gap-1 rounded-lg bg-violet-600/20 px-3 py-1.5 text-xs font-semibold text-violet-300 transition hover:bg-violet-600/30">Track</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function applyFilter() {
+      const q = document.getElementById('search').value.toLowerCase();
+      const f = document.getElementById('filter').value;
+      render(criminals.filter(c => {
+        const matches = c.name.toLowerCase().includes(q) || c.crime.toLowerCase().includes(q) || c.area.toLowerCase().includes(q);
+        let matchesFilter = f === 'All' || c.crime === f;
+        if (f === 'High Risk') matchesFilter = c.risk >= 80;
+        if (f === 'Repeat') matchesFilter = c.repeat;
+        return matches && matchesFilter;
+      }));
+    }
+
+    document.getElementById('search').addEventListener('input', applyFilter);
+    document.getElementById('filter').addEventListener('change', applyFilter);
+    render(criminals);
+  </script>
+</body>
+</html>
